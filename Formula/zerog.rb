@@ -2,7 +2,7 @@ class Zerog < Formula
   desc "Antigravity Discord Wrapper Bot (ZeroG)"
   homepage "https://github.com/SolidLab-dev/ZeroG"
   url "https://github.com/SolidLab-dev/ZeroG.git", branch: "main"
-  version "0.1.3"
+  version "0.1.4"
   head "https://github.com/SolidLab-dev/ZeroG.git", branch: "main"
 
   depends_on "python@3.11"
@@ -230,7 +230,7 @@ class Zerog < Formula
   end
 
   service do
-    run [opt_bin/"zerog"]
+    run [opt_bin/"zerog", "run"]
     keep_alive true
     working_dir libexec
     log_path var/"log/zerog.log"
