@@ -75,8 +75,10 @@ zerog doctor    # 토큰 등 환경설정 진단
 zerog status    # 백그라운드 구동 상태 확인
 zerog logs      # 실시간 로그 확인
 
-# 5. 봇 백그라운드 서비스 시작 (재부팅 시 자동 실행)
-brew services start zerog
+# 5. 봇 백그라운드 서비스 제어
+zerog start     # 봇 실행 (재부팅 시 자동 구동 활성화)
+zerog stop      # 봇 정지
+zerog restart   # 봇 재시작
 
 # (참고) 봇 기억(대화 기록) 전체 초기화
 zerog clear
