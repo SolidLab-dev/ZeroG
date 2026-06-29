@@ -2,7 +2,7 @@ class Zerog < Formula
   desc "Antigravity Discord Wrapper Bot (ZeroG)"
   homepage "https://github.com/SolidLab-dev/ZeroG"
   url "https://github.com/SolidLab-dev/ZeroG.git", branch: "main"
-  version "0.1.4"
+  version "0.1.5"
   head "https://github.com/SolidLab-dev/ZeroG.git", branch: "main"
 
   depends_on "python@3.11"
@@ -140,7 +140,10 @@ class Zerog < Formula
           
       elif [ "$1" = "start" ]; then
           echo -e "\\033[1;32m🚀 Starting ZeroG background service...\\033[0m"
-          brew services start zerog
+          if brew services start zerog 2>&1 | grep -q "Bootstrap failed: 5"; then
+              echo -e "\\033[1;33m⚠️ Service already registered. Forcing restart instead...\\033[0m"
+              brew services restart zerog
+          fi
           exit 0
           
       elif [ "$1" = "stop" ]; then
