@@ -12,6 +12,9 @@ class Zerog < Formula
     system "python3", "-m", "venv", libexec
     system libexec/"bin/pip", "install", "-r", "requirements.txt"
     
+    # Install man page
+    man1.install "zerog.1"
+
     # Copy all project files to libexec
     libexec.install Dir["*"]
 
@@ -138,6 +141,21 @@ class Zerog < Formula
           fi
           exit 0
           
+      elif [ "$1" = "start" ]; then
+          echo -e "\\033[1;32m🚀 Starting ZeroG background service...\\033[0m"
+          brew services start zerog
+          exit 0
+          
+      elif [ "$1" = "stop" ]; then
+          echo -e "\\033[1;33m🛑 Stopping ZeroG background service...\\033[0m"
+          brew services stop zerog
+          exit 0
+          
+      elif [ "$1" = "restart" ]; then
+          echo -e "\\033[1;36m🔄 Restarting ZeroG background service...\\033[0m"
+          brew services restart zerog
+          exit 0
+          
       elif [ "$1" = "logs" ]; then
           if [ -f "$LOG_FILE" ]; then
               echo "👀 Tailing ZeroG logs (Press Ctrl+C to exit)..."
@@ -158,11 +176,57 @@ class Zerog < Formula
               echo "Aborted."
           fi
           exit 0
-      fi
+          
+      elif [ -z "$1" ]; then
+          # No arguments, run foreground mode
+          cd #{libexec}
+          exec #{libexec}/bin/python3 main.py
+          
+      elif [ "$1" = "help" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "manual" ]; then
+          BLUE="\\033[1;34m"
+          CYAN="\\033[1;36m"
+          GREEN="\\033[1;32m"
+          PURPLE="\\033[1;35m"
+          YELLOW="\\033[1;33m"
+          BOLD="\\033[1m"
+          DIM="\\033[2m"
+          RESET="\\033[0m"
 
-      # Default execution
-      cd #{libexec}
-      exec #{libexec}/bin/python3 main.py "$@"
+          echo -e ""
+          echo -e "${CYAN}${BOLD}  ███████╗███████╗██████╗  ██████╗  ██████╗ ${RESET}"
+          echo -e "${CYAN}${BOLD}  ╚══███╔╝██╔════╝██╔══██╗██╔═══██╗██╔════╝ ${RESET}"
+          echo -e "${CYAN}${BOLD}    ███╔╝ █████╗  ██████╔╝██║   ██║██║  ███╗${RESET}"
+          echo -e "${BLUE}${BOLD}   ███╔╝  ██╔══╝  ██╔══██╗██║   ██║██║   ██║${RESET}"
+          echo -e "${BLUE}${BOLD}  ███████╗███████╗██║  ██║╚██████╔╝╚██████╔╝${RESET}"
+          echo -e "${BLUE}${BOLD}  ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ${RESET}"
+          echo -e "  ${DIM}A N T I G R A V I T Y   A G E N T${RESET}"
+          echo -e ""
+          echo -e "${DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+          echo -e "${BOLD}USAGE:${RESET} zerog <command>"
+          echo -e ""
+          echo -e "${PURPLE}❖${RESET} ${BOLD}COMMANDS${RESET}"
+          echo -e "  ${CYAN}onboard${RESET}    : Run the interactive setup wizard (Tokens, Webhook)"
+          echo -e "  ${CYAN}start${RESET}      : Start ZeroG as a background service"
+          echo -e "  ${CYAN}stop${RESET}       : Stop the background service"
+          echo -e "  ${CYAN}restart${RESET}    : Restart the background service"
+          echo -e "  ${CYAN}status${RESET}     : Check if the service is running"
+          echo -e "  ${CYAN}doctor${RESET}     : Diagnose system configuration and environment"
+          echo -e "  ${CYAN}logs${RESET}       : Tail real-time logs from the background service"
+          echo -e "  ${CYAN}clear${RESET}      : Factory reset bot memory and conversation histories"
+          echo -e "  ${CYAN}help${RESET}       : Show this beautiful help manual"
+          echo -e ""
+          echo -e "${PURPLE}❖${RESET} ${BOLD}QUICK START${RESET}"
+          echo -e "  1. Run ${GREEN}zerog onboard${RESET} to securely store your tokens."
+          echo -e "  2. Run ${GREEN}zerog start${RESET} to awaken your private agent."
+          echo -e "${DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+          echo -e ""
+          exit 0
+          
+      else
+          echo -e "\\033[1;31m❌ Unknown command: $1\\033[0m"
+          echo -e "Run '\\033[1;36mzerog help\\033[0m' or '\\033[1;36mman zerog\\033[0m' to see the manual."
+          exit 1
+      fi
     EOS
   end
 

@@ -1,0 +1,49 @@
+.TH ZEROG 1 "June 2026" "ZeroG 0.1.0" "User Commands"
+.SH NAME
+zerog \- Antigravity Discord Wrapper Bot
+.SH SYNOPSIS
+.B zerog
+[\fICOMMAND\fR]
+.SH DESCRIPTION
+.B zerog
+is a powerful Discord wrapper bot designed by SolidLab that allows users to interact with AI agents seamlessly. It supports persistent thread memory, contextual file binding, background service execution, and robust error handling.
+.SH COMMANDS
+.TP
+.B onboard
+Launch the interactive setup wizard. This command will prompt you to enter your Discord Bot Token, Allowed User ID, and an optional Discord Webhook URL. Settings are securely saved in \fI~/.zerog/.env\fR.
+.TP
+.B start
+Start ZeroG as a background service using Homebrew services. The bot will automatically restart upon reboot.
+.TP
+.B stop
+Stop the ZeroG background service.
+.TP
+.B restart
+Restart the ZeroG background service.
+.TP
+.B status
+Check the current execution status of the ZeroG background service.
+.TP
+.B doctor
+Diagnose the system configuration. Checks if the \fI.env\fR file is correctly configured and validates directory structures.
+.TP
+.B logs
+Tail the real-time logs of the background service. Logs are stored in \fI~/.zerog/logs/zerog.log\fR.
+.TP
+.B clear
+Factory reset the bot's memory. This deletes all conversation histories and settings stored in \fI~/.zerog/threads\fR and \fI~/.zerog/settings.json\fR.
+.TP
+.B help, -h, --help
+Show the beautiful inline ASCII art manual and usage instructions.
+.SH FILES
+.TP
+\fB~/.zerog/.env\fR
+Stores configuration variables (DISCORD_BOT_TOKEN, ALLOWED_USER_ID, DISCORD_WEBHOOK_URL).
+.TP
+\fB~/.zerog/logs/zerog.log\fR
+Rotated log file containing runtime information, warnings, and errors.
+.TP
+\fB~/.zerog/threads/\fR
+Directory containing JSON files that represent the persistent memory state for each Discord thread.
+.SH AUTHOR
+Engineered by SolidLab (https://github.com/SolidLab-dev).
