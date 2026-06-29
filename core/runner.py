@@ -72,13 +72,34 @@ async def run_agy(thread, cmd_str, cwd=None):
             else:
                 await status_msg.edit(content=f"❌ **agy 실행 에러 (코드: {process.returncode}):**\n```bash\n{full_output[-1900:]}\n```")
         elif full_output:
-            if len(full_output) > 1900:
+            if len(full_output) > 10000:
                 with tempfile.NamedTemporaryFile(mode="w+", delete=False, suffix=".md") as tmp:
                     tmp.write(full_output)
                     tmp_path = tmp.name
-                await status_msg.edit(content="📦 **분석 결과가 방대하여 파일로 전송합니다.** (아래 첨부 확인)")
+                await status_msg.edit(content="📦 **분석 결과가 10,000자를 초과하여 파일로 전송합니다.** (아래 첨부 확인)")
                 await thread.send(file=discord.File(tmp_path, filename="result.md"))
                 os.remove(tmp_path)
+            elif len(full_output) > 1900:
+                chunks = []
+                current_chunk = ""
+                for line in full_output.split('\n'):
+                    if len(line) > 1900:
+                        if current_chunk:
+                            chunks.append(current_chunk)
+                            current_chunk = ""
+                        for i in range(0, len(line), 1900):
+                            chunks.append(line[i:i+1900])
+                    elif len(current_chunk) + len(line) + 1 > 1900:
+                        chunks.append(current_chunk)
+                        current_chunk = line + "\n"
+                    else:
+                        current_chunk += line + "\n"
+                if current_chunk:
+                    chunks.append(current_chunk)
+                
+                await status_msg.edit(content=chunks[0])
+                for chunk in chunks[1:]:
+                    await thread.send(chunk)
             else:
                 await status_msg.edit(content=full_output)
         else:
