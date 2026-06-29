@@ -2,7 +2,7 @@ class Zerog < Formula
   desc "Antigravity Discord Wrapper Bot (ZeroG)"
   homepage "https://github.com/SolidLab-dev/ZeroG"
   url "https://github.com/SolidLab-dev/ZeroG/archive/refs/heads/main.tar.gz"
-  version "0.1.1"
+  version "0.1.2"
   head "https://github.com/SolidLab-dev/ZeroG.git", branch: "main"
 
   depends_on "python@3.11"
@@ -12,9 +12,6 @@ class Zerog < Formula
     system "python3", "-m", "venv", libexec
     system libexec/"bin/pip", "install", "-r", "requirements.txt"
     
-    # Install man page
-    man1.install "zerog.1"
-
     # Copy all project files to libexec
     libexec.install Dir["*"]
 
@@ -224,7 +221,7 @@ class Zerog < Formula
           
       else
           echo -e "\\033[1;31m❌ Unknown command: $1\\033[0m"
-          echo -e "Run '\\033[1;36mzerog help\\033[0m' or '\\033[1;36mman zerog\\033[0m' to see the manual."
+          echo -e "Run '\\033[1;36mzerog help\\033[0m' to see the manual."
           exit 1
       fi
     EOS

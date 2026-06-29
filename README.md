@@ -85,8 +85,11 @@ zerog clear
 ```
 
 ### 방법 B: 로컬에서 직접 실행
-터미널에서 가상환경이 활성화된 상태로 `main.py`를 직접 실행합니다.
 ```bash
+# 의존성 패키지 설치
+pip install -r requirements.txt
+
+# 봇 실행
 python3 main.py
 ```
 디스코드 서버에 봇이 온라인으로 표시되면 준비 완료입니다!
