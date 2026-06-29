@@ -2,7 +2,7 @@ import os
 import discord
 import shlex
 from discord.ext import commands
-from config import ALLOWED_USER_ID, ZEROG_DIR, logger
+from config import ALLOWED_USER_ID, ZEROG_DIR, AGY_PATH, logger
 from core.state import THREAD_MODELS, load_thread_state, save_thread_state
 from core.runner import run_agy
 
@@ -58,7 +58,7 @@ class ChatCog(commands.Cog):
                 full_prompt = context_prompt + prompt
                 escaped_prompt = shlex.quote(full_prompt)
                 
-                base_cmd = 'agy --print'
+                base_cmd = f'{AGY_PATH} --print'
                 if thread_id_str in THREAD_MODELS:
                     model = THREAD_MODELS[thread_id_str]
                     # 모델명도 안전하게 shlex.quote 사용

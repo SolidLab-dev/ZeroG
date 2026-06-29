@@ -4,7 +4,7 @@ import asyncio
 from datetime import datetime
 from discord import app_commands
 from discord.ext import commands
-from config import ALLOWED_USER_ID, logger
+from config import ALLOWED_USER_ID, AGY_PATH, logger
 from core.state import THREAD_MODELS, save_settings, load_thread_state, save_thread_state
 from core.runner import kill_process
 
@@ -18,9 +18,9 @@ class TaskCommands(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         global AVAILABLE_MODELS
-        logger.info("🔄 agy 사용 가능한 모델 목록을 불러오는 중...")
+        logger.info(f"🔄 {AGY_PATH} 사용 가능한 모델 목록을 불러오는 중...")
         try:
-            proc = await asyncio.create_subprocess_shell("agy models", stdout=asyncio.subprocess.PIPE)
+            proc = await asyncio.create_subprocess_shell(f"{AGY_PATH} models", stdout=asyncio.subprocess.PIPE)
             stdout, _ = await proc.communicate()
             lines = stdout.decode('utf-8').strip().split('\n')
             models = []

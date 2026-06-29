@@ -23,6 +23,15 @@ DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 os.makedirs(THREADS_DIR, exist_ok=True)
 os.makedirs(LOGS_DIR, exist_ok=True)
 
+import subprocess
+
+try:
+    AGY_PATH = subprocess.check_output(['/bin/zsh', '-lc', 'which agy']).decode().strip()
+    if not AGY_PATH or "not found" in AGY_PATH:
+        AGY_PATH = 'agy'
+except Exception:
+    AGY_PATH = 'agy'
+
 import logging
 from logging.handlers import RotatingFileHandler
 
