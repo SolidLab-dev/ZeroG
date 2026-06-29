@@ -2,7 +2,7 @@ class Zerog < Formula
   desc "Antigravity Discord Wrapper Bot (ZeroG)"
   homepage "https://github.com/SolidLab-dev/ZeroG"
   url "https://github.com/SolidLab-dev/ZeroG.git", branch: "main"
-  version "0.1.5"
+  version "0.1.6"
   head "https://github.com/SolidLab-dev/ZeroG.git", branch: "main"
 
   depends_on "python@3.11"
@@ -238,7 +238,7 @@ class Zerog < Formula
     working_dir libexec
     log_path var/"log/zerog.log"
     error_log_path var/"log/zerog_error.log"
-    environment_variables PATH: "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    environment_variables PATH: "#{HOMEBREW_PREFIX}/bin:#{HOMEBREW_PREFIX}/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
   end
 
   def caveats
