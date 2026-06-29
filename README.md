@@ -67,11 +67,13 @@ brew tap SolidLab-dev/ZeroG https://github.com/SolidLab-dev/ZeroG
 # 2. 패키지 설치
 brew install zerog
 
-# 3. 환경 변수 설정 (설치 후 출력되는 경로 안내 참조)
-nano /usr/local/opt/zerog/libexec/.env 
-# (애플 실리콘 맥은 /opt/homebrew/opt/zerog/libexec/.env)
+# 3. 봇 세팅 (토큰 및 웹훅 URL 입력)
+zerog onboard
 
-# 4. 백그라운드 서비스 시작 (재부팅 시 자동 실행)
+# 4. 로그 실시간 확인 (문제 발생 시, 선택사항)
+zerog logs
+
+# 5. 봇 백그라운드 서비스 시작 (재부팅 시 자동 실행)
 brew services start zerog
 ```
 

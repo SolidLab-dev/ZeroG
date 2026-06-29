@@ -15,9 +15,56 @@ class Zerog < Formula
     # Copy all project files to libexec
     libexec.install Dir["*"]
 
-    # Create a wrapper script in bin
     (bin/"zerog").write <<~EOS
       #!/bin/bash
+      
+      ZEROG_DIR="$HOME/.zerog"
+      ENV_FILE="$ZEROG_DIR/.env"
+      LOG_FILE="$ZEROG_DIR/logs/zerog.log"
+      
+      if [ "$1" = "onboard" ] || [ "$1" = "setup" ]; then
+          echo "🚀 Welcome to ZeroG Onboarding!"
+          echo "We will securely save your settings to $ENV_FILE"
+          echo "------------------------------------------------"
+          read -p "Enter DISCORD_BOT_TOKEN: " token
+          read -p "Enter ALLOWED_USER_ID (Numbers only): " uid
+          read -p "Enter DISCORD_WEBHOOK_URL (Optional, press Enter to skip): " webhook
+          
+          mkdir -p "$ZEROG_DIR"
+          echo "DISCORD_BOT_TOKEN=$token" > "$ENV_FILE"
+          echo "ALLOWED_USER_ID=$uid" >> "$ENV_FILE"
+          if [ -n "$webhook" ]; then
+              echo "DISCORD_WEBHOOK_URL=$webhook" >> "$ENV_FILE"
+          fi
+          
+          echo "------------------------------------------------"
+          echo "✅ Onboarding complete!"
+          echo "You can now run: brew services start zerog"
+          exit 0
+          
+      elif [ "$1" = "logs" ]; then
+          if [ -f "$LOG_FILE" ]; then
+              echo "👀 Tailing ZeroG logs (Press Ctrl+C to exit)..."
+              tail -f "$LOG_FILE"
+          else
+              echo "❌ Log file not found at $LOG_FILE"
+          fi
+          exit 0
+          
+      elif [ "$1" = "clear" ]; then
+          echo "⚠️ This will delete all thread memory and states."
+          read -p "Are you sure? (y/N): " confirm
+          if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
+              rm -rf "$ZEROG_DIR/threads"
+              rm -f "$ZEROG_DIR/settings.json"
+              echo "✅ Memory cleared successfully!"
+          else
+              echo "Aborted."
+          fi
+          exit 0
+      fi
+
+      # Default execution
       cd #{libexec}
       exec #{libexec}/bin/python3 main.py "$@"
     EOS
