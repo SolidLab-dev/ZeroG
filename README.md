@@ -54,16 +54,32 @@ ZeroG/
    ```
 
 3. **데이터 저장소 확인**
-   - 봇을 실행하면 유저의 홈 디렉토리에 `~/.zerog/` 폴더가 자동 생성되며, 모든 대화 기록(JSON)이 여기에 안전하게 저장됩니다.
+   - 봇을 실행하면 유저의 홈 디렉토리에 `~/.zerog/` 폴더가 자동 생성되며, 모든 대화 기록(JSON) 및 로그가 여기에 안전하게 저장됩니다.
 
 ## 🚀 실행 방법 (Usage)
 
-터미널에서 가상환경이 활성화된 상태로 `main.py`를 실행합니다.
+### 방법 A: Homebrew를 통한 설치 및 백그라운드 구동 (추천)
+맥북 사용자라면 Homebrew를 통해 가장 깔끔하게 설치하고 백그라운드 서비스로 굴릴 수 있습니다.
+```bash
+# 1. ZeroG 저장소를 Homebrew Tap으로 등록
+brew tap SolidLab-dev/ZeroG https://github.com/SolidLab-dev/ZeroG
 
+# 2. 패키지 설치
+brew install zerog
+
+# 3. 환경 변수 설정 (설치 후 출력되는 경로 안내 참조)
+nano /usr/local/opt/zerog/libexec/.env 
+# (애플 실리콘 맥은 /opt/homebrew/opt/zerog/libexec/.env)
+
+# 4. 백그라운드 서비스 시작 (재부팅 시 자동 실행)
+brew services start zerog
+```
+
+### 방법 B: 로컬에서 직접 실행
+터미널에서 가상환경이 활성화된 상태로 `main.py`를 직접 실행합니다.
 ```bash
 python3 main.py
 ```
-
 디스코드 서버에 봇이 온라인으로 표시되면 준비 완료입니다!
 
 ## 🛠️ 슬래시 커맨드 목록
