@@ -2,7 +2,7 @@ class Zerog < Formula
   desc "Antigravity Discord Wrapper Bot (ZeroG)"
   homepage "https://github.com/SolidLab-dev/ZeroG"
   url "https://github.com/SolidLab-dev/ZeroG/archive/refs/heads/main.tar.gz"
-  version "1.0.0"
+  version "1.1.0"
   head "https://github.com/SolidLab-dev/ZeroG.git", branch: "main"
 
   depends_on "python@3.11"
@@ -23,35 +23,47 @@ class Zerog < Formula
       LOG_FILE="$ZEROG_DIR/logs/zerog.log"
       
       if [ "$1" = "onboard" ] || [ "$1" = "setup" ]; then
-          # ANSI Colors
+          # ANSI Colors & Styles
           BLUE="\\033[1;34m"
           CYAN="\\033[1;36m"
           GREEN="\\033[1;32m"
+          PURPLE="\\033[1;35m"
           YELLOW="\\033[1;33m"
           BOLD="\\033[1m"
+          DIM="\\033[2m"
           RESET="\\033[0m"
 
+          clear
           echo -e ""
-          echo -e "${CYAN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
-          echo -e "${CYAN}${BOLD}                 🚀 Welcome to ZeroG Onboarding!                 ${RESET}"
-          echo -e "${CYAN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
-          echo -e "${YELLOW}ZeroG will run seamlessly in the background as your private agent.${RESET}"
-          echo -e "We will securely save your settings to ${BOLD}$ENV_FILE${RESET}"
+          echo -e "${CYAN}${BOLD}  ███████╗███████╗██████╗  ██████╗  ██████╗ ${RESET}"
+          echo -e "${CYAN}${BOLD}  ╚══███╔╝██╔════╝██╔══██╗██╔═══██╗██╔════╝ ${RESET}"
+          echo -e "${CYAN}${BOLD}    ███╔╝ █████╗  ██████╔╝██║   ██║██║  ███╗${RESET}"
+          echo -e "${BLUE}${BOLD}   ███╔╝  ██╔══╝  ██╔══██╗██║   ██║██║   ██║${RESET}"
+          echo -e "${BLUE}${BOLD}  ███████╗███████╗██║  ██║╚██████╔╝╚██████╔╝${RESET}"
+          echo -e "${BLUE}${BOLD}  ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ${RESET}"
+          echo -e "  ${DIM}A N T I G R A V I T Y   A G E N T${RESET}"
+          echo -e "  ${PURPLE}${BOLD}Engineered by SolidLab${RESET}"
+          echo -e ""
+          echo -e "${DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+          echo -e "${YELLOW}🚀 API 과금과 환경의 제약(중력)에서 벗어날 준비가 되셨나요?${RESET}"
+          echo -e "ZeroG를 백그라운드 프라이빗 에이전트로 설정합니다."
+          echo -e "설정 파일은 안전하게 ${BOLD}$ENV_FILE${RESET} 에 저장됩니다."
+          echo -e "${DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
           echo -e ""
           
-          echo -e "${BLUE}[Step 1/3] Discord Bot Token${RESET}"
-          echo -e "You can get this from the Discord Developer Portal."
-          read -p "➜ Enter Token: " token
+          echo -e "${PURPLE}❖${RESET} ${BOLD}[Step 1/3] Discord Bot Token${RESET}"
+          echo -e "  ${DIM}Discord Developer Portal에서 발급받은 봇 토큰을 입력하세요.${RESET}"
+          read -p "  ➜ " token
           echo -e ""
           
-          echo -e "${BLUE}[Step 2/3] Allowed User ID${RESET}"
-          echo -e "Only this User ID will be able to talk to ZeroG (Numbers only)."
-          read -p "➜ Enter User ID: " uid
+          echo -e "${PURPLE}❖${RESET} ${BOLD}[Step 2/3] Allowed User ID${RESET}"
+          echo -e "  ${DIM}ZeroG를 조종할 권한을 가진 본인의 디스코드 유저 ID(숫자)입니다.${RESET}"
+          read -p "  ➜ " uid
           echo -e ""
           
-          echo -e "${BLUE}[Step 3/3] Discord Webhook URL (Optional)${RESET}"
-          echo -e "ZeroG will push ERROR and WARNING alerts to this webhook."
-          read -p "➜ Enter Webhook URL (Press Enter to skip): " webhook
+          echo -e "${PURPLE}❖${RESET} ${BOLD}[Step 3/3] Discord Webhook URL (Optional)${RESET}"
+          echo -e "  ${DIM}ZeroG의 에러 및 경고 로그를 수신할 웹훅 주소를 입력하세요. (건너뛰려면 Enter)${RESET}"
+          read -p "  ➜ " webhook
           echo -e ""
           
           mkdir -p "$ZEROG_DIR"
