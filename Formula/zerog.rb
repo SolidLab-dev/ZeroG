@@ -2,7 +2,7 @@ class Zerog < Formula
   desc "Antigravity Discord Wrapper Bot (ZeroG)"
   homepage "https://github.com/SolidLab-dev/ZeroG"
   url "https://github.com/SolidLab-dev/ZeroG/archive/refs/heads/main.tar.gz"
-  version "1.1.0"
+  version "0.1.0"
   head "https://github.com/SolidLab-dev/ZeroG.git", branch: "main"
 
   depends_on "python@3.11"
@@ -79,6 +79,63 @@ class Zerog < Formula
           echo -e "${CYAN}➜ brew services start zerog${RESET}"
           echo -e "${GREEN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
           echo -e ""
+          exit 0
+          
+      elif [ "$1" = "status" ]; then
+          BLUE="\\033[1;34m"
+          BOLD="\\033[1m"
+          RESET="\\033[0m"
+          echo -e "${BLUE}${BOLD}🔍 Checking ZeroG Service Status...${RESET}"
+          brew services info zerog
+          exit 0
+          
+      elif [ "$1" = "doctor" ]; then
+          BLUE="\\033[1;34m"
+          CYAN="\\033[1;36m"
+          GREEN="\\033[1;32m"
+          YELLOW="\\033[1;33m"
+          DIM="\\033[2m"
+          BOLD="\\033[1m"
+          RESET="\\033[0m"
+          
+          echo -e "${BLUE}${BOLD}🩺 ZeroG System Doctor${RESET}"
+          echo -e "${DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+          
+          if [ -f "$ENV_FILE" ]; then
+              echo -e "${GREEN}✅ Settings file found: $ENV_FILE${RESET}"
+              echo -e ""
+              
+              BOT_TOKEN=$(grep DISCORD_BOT_TOKEN "$ENV_FILE" | cut -d '=' -f2)
+              if [ -n "$BOT_TOKEN" ]; then
+                  echo -e "${GREEN}✅ Bot Token: ${BOT_TOKEN:0:15}*******************${RESET}"
+              else
+                  echo -e "${YELLOW}⚠️ Bot Token: Missing!${RESET}"
+              fi
+              
+              USER_ID=$(grep ALLOWED_USER_ID "$ENV_FILE" | cut -d '=' -f2)
+              if [ -n "$USER_ID" ]; then
+                  echo -e "${GREEN}✅ Allowed User ID: $USER_ID${RESET}"
+              else
+                  echo -e "${YELLOW}⚠️ Allowed User ID: Missing!${RESET}"
+              fi
+              
+              WEBHOOK=$(grep DISCORD_WEBHOOK_URL "$ENV_FILE" | cut -d '=' -f2)
+              if [ -n "$WEBHOOK" ]; then
+                  echo -e "${GREEN}✅ Webhook URL: Configured${RESET}"
+              else
+                  echo -e "${DIM}ℹ️ Webhook URL: Not configured (Optional)${RESET}"
+              fi
+          else
+              echo -e "${YELLOW}❌ Settings file NOT FOUND at $ENV_FILE${RESET}"
+              echo -e "Please run '${CYAN}zerog onboard${RESET}' to configure."
+          fi
+          
+          echo -e "${DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+          if [ -d "$ZEROG_DIR/logs" ]; then
+              echo -e "${GREEN}✅ Logs directory exists.${RESET}"
+          else
+              echo -e "${YELLOW}⚠️ Logs directory missing. Will be created on start.${RESET}"
+          fi
           exit 0
           
       elif [ "$1" = "logs" ]; then

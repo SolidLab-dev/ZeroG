@@ -70,11 +70,16 @@ brew install zerog
 # 3. 봇 세팅 (토큰 및 웹훅 URL 입력)
 zerog onboard
 
-# 4. 로그 실시간 확인 (문제 발생 시, 선택사항)
-zerog logs
+# 4. 상태 진단 및 점검 (선택사항)
+zerog doctor    # 토큰 등 환경설정 진단
+zerog status    # 백그라운드 구동 상태 확인
+zerog logs      # 실시간 로그 확인
 
 # 5. 봇 백그라운드 서비스 시작 (재부팅 시 자동 실행)
 brew services start zerog
+
+# (참고) 봇 기억(대화 기록) 전체 초기화
+zerog clear
 ```
 
 ### 방법 B: 로컬에서 직접 실행
