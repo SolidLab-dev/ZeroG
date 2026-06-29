@@ -1,7 +1,8 @@
 import os
 import discord
+import shlex
 from discord.ext import commands
-from config import ALLOWED_USER_ID, ZEROG_DIR
+from config import ALLOWED_USER_ID, ZEROG_DIR, logger
 from core.state import THREAD_MODELS, load_thread_state, save_thread_state
 from core.runner import run_agy
 
@@ -28,7 +29,7 @@ class ChatCog(commands.Cog):
             thread_id_str = str(thread.id)
             prompt = message.content
 
-            print(f"\n📥 [디스코드 입력] 스레드: #{thread.name} | 프롬프트: '{prompt}'")
+            logger.info(f"📥 [디스코드 입력] 스레드: #{thread.name} | 프롬프트: '{prompt}'")
 
             # 파일 첨부 처리
             attachment_context = ""
@@ -37,7 +38,7 @@ class ChatCog(commands.Cog):
                     file_path = os.path.join(self.temp_dir, attachment.filename)
                     await attachment.save(file_path)
                     attachment_context += f"[첨부파일 참조: {file_path}]\n"
-                    print(f"📎 [첨부파일 저장] {file_path}")
+                    logger.info(f"📎 [첨부파일 저장] {file_path}")
                 
                 if not prompt:
                     prompt = "첨부된 파일을 확인해주세요."
@@ -55,17 +56,18 @@ class ChatCog(commands.Cog):
                     context_prompt += "\n[새로운 사용자 명령]: "
                 
                 full_prompt = context_prompt + prompt
-                escaped_prompt = full_prompt.replace('"', '\\"')
+                escaped_prompt = shlex.quote(full_prompt)
                 
                 base_cmd = 'agy --print'
                 if thread_id_str in THREAD_MODELS:
                     model = THREAD_MODELS[thread_id_str]
-                    base_cmd += f' --model "{model}"'
+                    # 모델명도 안전하게 shlex.quote 사용
+                    base_cmd += f' --model {shlex.quote(model)}'
                     
-                cmd_str = f'{base_cmd} "{escaped_prompt}"'
-                print(f"⚙️ [실행] {cmd_str}")
+                cmd_str = f'{base_cmd} {escaped_prompt}'
+                logger.info(f"⚙️ [실행] agy (프롬프트 길이: {len(full_prompt)}자)")
                 if bound_dir:
-                    print(f"📁 [바인딩 경로] {bound_dir}")
+                    logger.info(f"📁 [바인딩 경로] {bound_dir}")
                 
                 # Execute agy
                 returncode, full_output = await run_agy(thread, cmd_str, cwd=bound_dir)

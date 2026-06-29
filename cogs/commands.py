@@ -4,7 +4,7 @@ import asyncio
 from datetime import datetime
 from discord import app_commands
 from discord.ext import commands
-from config import ALLOWED_USER_ID
+from config import ALLOWED_USER_ID, logger
 from core.state import THREAD_MODELS, save_settings, load_thread_state, save_thread_state
 from core.runner import kill_process
 
@@ -18,7 +18,7 @@ class TaskCommands(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         global AVAILABLE_MODELS
-        print("🔄 agy 사용 가능한 모델 목록을 불러오는 중...")
+        logger.info("🔄 agy 사용 가능한 모델 목록을 불러오는 중...")
         try:
             proc = await asyncio.create_subprocess_shell("agy models", stdout=asyncio.subprocess.PIPE)
             stdout, _ = await proc.communicate()
@@ -33,11 +33,11 @@ class TaskCommands(commands.Cog):
                         
             if models:
                 AVAILABLE_MODELS = models
-                print(f"✅ 사용 가능한 모델 {len(models)}개를 성공적으로 로드했습니다.")
+                logger.info(f"✅ 사용 가능한 모델 {len(models)}개를 성공적으로 로드했습니다.")
             else:
-                print("⚠️ 모델 목록이 비어있습니다. 기본값을 사용합니다.")
+                logger.warning("⚠️ 모델 목록이 비어있습니다. 기본값을 사용합니다.")
         except Exception as e:
-            print(f"⚠️ 모델 목록을 가져오는 데 실패했습니다: {e}")
+            logger.error(f"⚠️ 모델 목록을 가져오는 데 실패했습니다: {e}")
 
     async def model_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
         matches = [

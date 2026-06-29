@@ -3,6 +3,7 @@ import os
 import signal
 import tempfile
 import discord
+from config import logger
 
 ACTIVE_PROCESSES = {}
 
@@ -50,13 +51,14 @@ async def run_agy(thread, cmd_str, cwd=None):
             if not chunk:
                 break
             output_buffer.extend(chunk)
+            # You can keep print here for streaming to console, but we avoid spamming logger
             print(chunk.decode('utf-8', errors='replace'), end="", flush=True)
 
         is_running = False
         await updater_task
         await process.wait()
         
-        print(f"\n🏁 [종료] agy 프로세스 종료 (코드: {process.returncode})")
+        logger.info(f"🏁 [종료] agy 프로세스 종료 (코드: {process.returncode})")
         
         # Cleanup
         if thread_id in ACTIVE_PROCESSES:
@@ -85,7 +87,7 @@ async def run_agy(thread, cmd_str, cwd=None):
         return process.returncode, full_output
         
     except Exception as e:
-        print(f"💥 [시스템 오류] {str(e)}")
+        logger.error(f"💥 [시스템 오류] {str(e)}")
         await status_msg.edit(content=f"⚠️ 시스템 오류: {str(e)}")
         if thread_id in ACTIVE_PROCESSES:
             del ACTIVE_PROCESSES[thread_id]
@@ -103,6 +105,18 @@ def kill_process(thread_id_str):
             proc.terminate()
             return True
         except Exception as e:
-            print(f"Failed to kill process: {e}")
+            logger.error(f"Failed to kill process: {e}")
             return False
     return False
+
+def kill_all_processes():
+    """
+    Kills all active subprocesses. Used for graceful shutdown.
+    """
+    for thread_id, proc in ACTIVE_PROCESSES.items():
+        try:
+            proc.terminate()
+            logger.info(f"Terminated lingering process for thread {thread_id}")
+        except Exception as e:
+            logger.error(f"Failed to terminate process for thread {thread_id}: {e}")
+    ACTIVE_PROCESSES.clear()

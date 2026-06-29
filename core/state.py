@@ -1,6 +1,6 @@
 import os
 import json
-from config import SETTINGS_FILE, THREADS_DIR
+from config import SETTINGS_FILE, THREADS_DIR, logger
 
 THREAD_MODELS = {}
 
@@ -13,7 +13,7 @@ def load_settings():
                 THREAD_MODELS = data.get("models", {})
                 return
         except Exception as e:
-            print(f"⚠️ 설정 로드 실패: {e}")
+            logger.error(f"⚠️ 설정 로드 실패: {e}")
     THREAD_MODELS = {}
 
 def save_settings():
@@ -21,7 +21,7 @@ def save_settings():
         with open(SETTINGS_FILE, 'w', encoding='utf-8') as f:
             json.dump({"models": THREAD_MODELS}, f, ensure_ascii=False, indent=2)
     except Exception as e:
-        print(f"⚠️ 설정 저장 실패: {e}")
+        logger.error(f"⚠️ 설정 저장 실패: {e}")
 
 def load_thread_state(thread_id_str):
     """
@@ -50,7 +50,7 @@ def save_thread_state(thread_id_str, history, bound_dir=None):
                 "bound_dir": bound_dir
             }, f, ensure_ascii=False, indent=2)
     except Exception as e:
-        print(f"⚠️ 스레드 {thread_id_str} 저장 실패: {e}")
+        logger.error(f"⚠️ 스레드 {thread_id_str} 저장 실패: {e}")
 
 # Load settings at import
 load_settings()
