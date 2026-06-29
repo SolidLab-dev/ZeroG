@@ -23,12 +23,36 @@ class Zerog < Formula
       LOG_FILE="$ZEROG_DIR/logs/zerog.log"
       
       if [ "$1" = "onboard" ] || [ "$1" = "setup" ]; then
-          echo "🚀 Welcome to ZeroG Onboarding!"
-          echo "We will securely save your settings to $ENV_FILE"
-          echo "------------------------------------------------"
-          read -p "Enter DISCORD_BOT_TOKEN: " token
-          read -p "Enter ALLOWED_USER_ID (Numbers only): " uid
-          read -p "Enter DISCORD_WEBHOOK_URL (Optional, press Enter to skip): " webhook
+          # ANSI Colors
+          BLUE="\\033[1;34m"
+          CYAN="\\033[1;36m"
+          GREEN="\\033[1;32m"
+          YELLOW="\\033[1;33m"
+          BOLD="\\033[1m"
+          RESET="\\033[0m"
+
+          echo -e ""
+          echo -e "${CYAN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+          echo -e "${CYAN}${BOLD}                 🚀 Welcome to ZeroG Onboarding!                 ${RESET}"
+          echo -e "${CYAN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+          echo -e "${YELLOW}ZeroG will run seamlessly in the background as your private agent.${RESET}"
+          echo -e "We will securely save your settings to ${BOLD}$ENV_FILE${RESET}"
+          echo -e ""
+          
+          echo -e "${BLUE}[Step 1/3] Discord Bot Token${RESET}"
+          echo -e "You can get this from the Discord Developer Portal."
+          read -p "➜ Enter Token: " token
+          echo -e ""
+          
+          echo -e "${BLUE}[Step 2/3] Allowed User ID${RESET}"
+          echo -e "Only this User ID will be able to talk to ZeroG (Numbers only)."
+          read -p "➜ Enter User ID: " uid
+          echo -e ""
+          
+          echo -e "${BLUE}[Step 3/3] Discord Webhook URL (Optional)${RESET}"
+          echo -e "ZeroG will push ERROR and WARNING alerts to this webhook."
+          read -p "➜ Enter Webhook URL (Press Enter to skip): " webhook
+          echo -e ""
           
           mkdir -p "$ZEROG_DIR"
           echo "DISCORD_BOT_TOKEN=$token" > "$ENV_FILE"
@@ -37,9 +61,12 @@ class Zerog < Formula
               echo "DISCORD_WEBHOOK_URL=$webhook" >> "$ENV_FILE"
           fi
           
-          echo "------------------------------------------------"
-          echo "✅ Onboarding complete!"
-          echo "You can now run: brew services start zerog"
+          echo -e "${GREEN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+          echo -e "${GREEN}${BOLD}✅ Onboarding complete! ZeroG is ready to launch.${RESET}"
+          echo -e "Run the following command to start the background agent:"
+          echo -e "${CYAN}➜ brew services start zerog${RESET}"
+          echo -e "${GREEN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+          echo -e ""
           exit 0
           
       elif [ "$1" = "logs" ]; then
@@ -83,18 +110,18 @@ class Zerog < Formula
     <<~EOS
       🚀 ZeroG has been installed successfully!
       
-      ZeroG requires a .env file to run. Please create it in the libexec directory:
-        nano #{libexec}/.env
+      Before starting the service, you MUST configure your bot tokens.
+      Run the interactive onboarding wizard:
+        zerog onboard
       
-      Add your Discord tokens:
-        DISCORD_BOT_TOKEN=your_token_here
-        ALLOWED_USER_ID=your_discord_id_here
-      
-      To start ZeroG as a background service:
+      After onboarding, start ZeroG as a background service:
         brew services start zerog
         
       To stop the service:
         brew services stop zerog
+        
+      To view real-time logs:
+        zerog logs
     EOS
   end
 end
