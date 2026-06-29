@@ -14,7 +14,7 @@ async def run_agy(thread, cmd_str, cwd=None):
     """
     thread_id = str(thread.id)
     
-    status_msg = await thread.send("🔄 **작업 시작 중...**")
+    status_msg = await thread.send("⚡ **에이전트가 생각을 모으고 있습니다...**")
     
     try:
         process = await asyncio.create_subprocess_shell(
@@ -76,13 +76,13 @@ async def run_agy(thread, cmd_str, cwd=None):
                 with tempfile.NamedTemporaryFile(mode="w+", delete=False, suffix=".md") as tmp:
                     tmp.write(full_output)
                     tmp_path = tmp.name
-                await status_msg.edit(content="✅ **결과가 길어 파일로 첨부합니다.** (아래 파일 확인)")
+                await status_msg.edit(content="📦 **분석 결과가 방대하여 파일로 전송합니다.** (아래 첨부 확인)")
                 await thread.send(file=discord.File(tmp_path, filename="result.md"))
                 os.remove(tmp_path)
             else:
-                await status_msg.edit(content=f"✅ **작업 완료:**\n{full_output}")
+                await status_msg.edit(content=full_output)
         else:
-            await status_msg.edit(content="✅ agy가 작업을 수행했으나 출력된 텍스트가 없습니다.")
+            await status_msg.edit(content="✅ **에이전트 연산이 완료되었으나, 반환된 메시지가 없습니다.**")
             
         return process.returncode, full_output
         
