@@ -89,8 +89,9 @@ zerog clear
 # 의존성 패키지 설치
 pip install -r requirements.txt
 
-# 봇 실행
+# 봇 실행 (포그라운드)
 python3 main.py
+# (또는 Homebrew 설치 후라면 `zerog run` 입력)
 ```
 디스코드 서버에 봇이 온라인으로 표시되면 준비 완료입니다!
 

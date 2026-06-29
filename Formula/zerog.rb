@@ -1,8 +1,8 @@
 class Zerog < Formula
   desc "Antigravity Discord Wrapper Bot (ZeroG)"
   homepage "https://github.com/SolidLab-dev/ZeroG"
-  url "https://github.com/SolidLab-dev/ZeroG/archive/refs/heads/main.tar.gz"
-  version "0.1.2"
+  url "https://github.com/SolidLab-dev/ZeroG.git", branch: "main"
+  version "0.1.3"
   head "https://github.com/SolidLab-dev/ZeroG.git", branch: "main"
 
   depends_on "python@3.11"
@@ -174,12 +174,13 @@ class Zerog < Formula
           fi
           exit 0
           
-      elif [ -z "$1" ]; then
-          # No arguments, run foreground mode
+      elif [ "$1" = "run" ]; then
+          echo -e "\\033[1;33m⚠️ Starting ZeroG in foreground mode...\\033[0m"
+          echo -e "\\033[2m(To run in background instead, use: zerog start)\\033[0m"
           cd #{libexec}
           exec #{libexec}/bin/python3 main.py
           
-      elif [ "$1" = "help" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "manual" ]; then
+      elif [ -z "$1" ] || [ "$1" = "help" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "manual" ]; then
           BLUE="\\033[1;34m"
           CYAN="\\033[1;36m"
           GREEN="\\033[1;32m"
@@ -203,6 +204,7 @@ class Zerog < Formula
           echo -e ""
           echo -e "${PURPLE}❖${RESET} ${BOLD}COMMANDS${RESET}"
           echo -e "  ${CYAN}onboard${RESET}    : Run the interactive setup wizard (Tokens, Webhook)"
+          echo -e "  ${CYAN}run${RESET}        : Run the bot directly in the foreground"
           echo -e "  ${CYAN}start${RESET}      : Start ZeroG as a background service"
           echo -e "  ${CYAN}stop${RESET}       : Stop the background service"
           echo -e "  ${CYAN}restart${RESET}    : Restart the background service"
