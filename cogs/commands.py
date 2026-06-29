@@ -9,7 +9,7 @@ from core.state import THREAD_MODELS, save_settings, load_thread_state, save_thr
 from core.runner import kill_process
 
 # Cache for available models
-AVAILABLE_MODELS = ["Gemini 3.5 Flash (High)"]
+AVAILABLE_MODELS = ["gemini-1.5-pro"]
 
 class TaskCommands(commands.Cog):
     def __init__(self, bot):
