@@ -50,12 +50,21 @@ class ChatCog(commands.Cog):
                 
                 context_prompt = ""
                 if len(history) > 0:
-                    context_prompt = "다음은 우리의 이전 전체 대화 기록입니다. 이 맥락을 완벽하게 기억하고 바탕으로 사용자의 새로운 질문/명령에 답변 및 수행하세요.\n\n[이전 대화 기록]\n"
+                    context_prompt = "<CONVERSATION_HISTORY>\n다음은 우리의 이전 전체 대화 기록입니다. 이 맥락을 완벽하게 기억하고 바탕으로 사용자의 새로운 질문/명령에 답변 및 수행하세요.\n\n"
                     for msg in history:
                         context_prompt += f"{msg['role']}: {msg['content']}\n"
-                    context_prompt += "\n[새로운 사용자 명령]: "
+                    context_prompt += "</CONVERSATION_HISTORY>\n\n"
                 
-                full_prompt = context_prompt + prompt
+                # ZeroG 전용 Rules 주입
+                zerog_rules = ""
+                rules_path = os.path.join(ZEROG_DIR, "AGENTS.md")
+                if os.path.exists(rules_path):
+                    with open(rules_path, "r", encoding="utf-8") as f:
+                        rules_content = f.read().strip()
+                        if rules_content:
+                            zerog_rules = f"<ZEROG_RULES>\n너는 현재 터미널이 아니라 디스코드 ZeroG 봇에 의해 실행되고 있다. 다음 규칙을 반드시 가장 최우선으로 준수해라:\n\n{rules_content}\n</ZEROG_RULES>\n\n"
+                
+                full_prompt = context_prompt + zerog_rules + f"<USER_REQUEST>\n{prompt}\n</USER_REQUEST>"
                 escaped_prompt = shlex.quote(full_prompt)
                 
                 base_cmd = f'{AGY_PATH} --print'

@@ -2,7 +2,7 @@ class Zerog < Formula
   desc "Antigravity Discord Wrapper Bot (ZeroG)"
   homepage "https://github.com/SolidLab-dev/ZeroG"
   url "https://github.com/SolidLab-dev/ZeroG.git", branch: "main"
-  version "0.1.8"
+  version "0.1.9"
   head "https://github.com/SolidLab-dev/ZeroG.git", branch: "main"
 
   depends_on "python@3.11"
